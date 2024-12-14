@@ -76,5 +76,11 @@ def save_model(model, model_dir, model_name):
     return model_path
 
 
-
+# example usage
+if __name__ == "__main__":
+    X = np.random.rand(100, 10)
+    y = np.random.rand(100)
+    model = LinearModel()
+    model = train_model(model, X, y)
+    print(evaluate_model(model, X, y))
 
