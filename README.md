@@ -26,7 +26,7 @@ California faces a critical housing affordability crisis, with housing costs out
 ---
 
 ## **Key Features**
-- **Data-Driven Insights:** Uses historical housing market data (2014–2024) from Zillow, U.S. Census Bureau, and other authoritative sources.
+- **Data-Driven Insights:** Uses historical housing market data (2014–2024) from authoritative sources, including Zillow, U.S. Census Bureau, Bureau of Labor Statistics, California Department of Finance, and other publicly available datasets.
 - **Predictive Models:** Includes Random Forest, Gradient Boosting, and regression models to identify key factors affecting affordability.
 - **Optimization Models:**
   - Resource allocation for affordable housing improvements.
