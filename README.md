@@ -3,7 +3,7 @@
 ## **Overview**
 This project explores housing affordability in California by combining **predictive modeling** and **optimization techniques**. The goal is to identify actionable solutions to address housing affordability challenges using real-world data and advanced analytical methods.
 
-This work is part of the IEOR 240 Optimization Course at UC Berkeley and highlights the application of optimization in housing-related decision-making.
+This work is part of the IEOR 240 Optimization Course and 242A Machine Learning Course at UC Berkeley and highlights the application of optimization in housing-related decision-making.
 
 ---
 
