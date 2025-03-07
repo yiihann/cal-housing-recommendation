@@ -4,6 +4,7 @@
 This project explores **housing affordability in California** by integrating **predictive modeling** and **optimization techniques**. The objective is to provide **data-driven insights** and **optimal housing recommendations** for policymakers, city planners, and individuals.
 
 This work is part of **IEOR 240 (Optimization Analysis) and IEOR 242A (Machine Learning Analytics)** at **UC Berkeley**, demonstrating the intersection of **machine learning** and **optimization-based decision-making** in real-world housing challenges.
+
 ---
 
 ## **Motivation**
@@ -71,6 +72,24 @@ California faces a **severe housing affordability crisis**, where housing costs 
    - Constructs a **Quality of Life (QoL) function** based on affordability, safety, and convenience.  
    - Runs **constrained optimization** to **recommend optimal locations**.
 
+<!-- 
+---
+
+## **Technologies Used**
+### **🛠️ Programming & Libraries**
+- **Languages:** Python  
+- **Data Processing:** Pandas, NumPy  
+- **Machine Learning:** Scikit-learn, XGBoost  
+- **Optimization:** Pyomo, OR-Tools, PuLP  
+- **Visualization:** Matplotlib, Seaborn  
+
+### **📂 Tools**
+- Jupyter Notebook  
+- GitHub (Version Control)  
+- Pandas Profiling for EDA  
+- Google Cloud (for potential large-scale data processing) -->
+
+s
 ---
 
 ## **Project Structure**
@@ -88,19 +107,3 @@ cal-housing-optimization/
 ├── results/               # Model outputs & analysis reports
 ├── README.md              # Project documentation (this file)
 └── LICENSE                # License information
-
-
-<!-- 
-## **Technologies Used**
-### **🛠️ Programming & Libraries**
-- **Languages:** Python  
-- **Data Processing:** Pandas, NumPy  
-- **Machine Learning:** Scikit-learn, XGBoost  
-- **Optimization:** Pyomo, OR-Tools, PuLP  
-- **Visualization:** Matplotlib, Seaborn  
-
-### **📂 Tools**
-- Jupyter Notebook  
-- GitHub (Version Control)  
-- Pandas Profiling for EDA  
-- Google Cloud (for potential large-scale data processing) -->
