@@ -190,7 +190,6 @@ def prepare_optimization_dataset(df, hourly_wage):
     """
     df_opt = df[df['Year'] >= 2021].reset_index(drop=True)
     df_opt = df_opt.drop(columns=['RegionType', 'StateName', 'HomeValue', 'ObservedRent'])
-    print(df_opt.head())
     # Standardize Metro names
     df_opt = standardize_metro_names(df_opt)
 
