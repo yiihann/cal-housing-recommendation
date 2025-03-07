@@ -3,3 +3,4 @@
 preprocessed/*
 models/*
 *.pkl
+analysis/*
