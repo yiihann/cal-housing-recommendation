@@ -1,57 +1,106 @@
 # California Housing Affordability Optimization Project
 
 ## **Overview**
-This project explores housing affordability in California by combining **predictive modeling** and **optimization techniques**. The goal is to identify actionable solutions to address housing affordability challenges using real-world data and advanced analytical methods.
+This project explores **housing affordability in California** by integrating **predictive modeling** and **optimization techniques**. The objective is to provide **data-driven insights** and **optimal housing recommendations** for policymakers, city planners, and individuals.
 
-This work is part of the IEOR 240 Optimization Course and 242A Machine Learning Course at UC Berkeley and highlights the application of optimization in housing-related decision-making.
-
+This work is part of **IEOR 240 (Optimization Analysis) and IEOR 242A (Machine Learning Analytics)** at **UC Berkeley**, demonstrating the intersection of **machine learning** and **optimization-based decision-making** in real-world housing challenges.
 ---
 
 ## **Motivation**
-California faces a critical housing affordability crisis, with housing costs outpacing income growth. This project aims to:
-- Forecast housing costs using historical data.
-- Develop an optimization framework to prioritize housing affordability solutions.
-- Provide insights to policymakers and individuals navigating California’s housing landscape.
+California faces a **severe housing affordability crisis**, where housing costs significantly outpace income growth. This project aims to:
+- **Predict housing costs** based on historical trends and socio-economic indicators.
+- **Optimize housing selection** by balancing affordability, location, and quality of life.
+- **Support decision-making** for policymakers and individuals navigating the housing market.
 
 ---
 
 ## **Objectives**
-1. Build predictive models for housing affordability using advanced regression and ensemble methods.
-2. Formulate optimization models to:
-   - Minimize rent-to-income ratios.
-   - Maximize affordable housing placements under budget constraints.
-   - Optimize housing policy interventions.
-3. Compare traditional optimization methods (e.g., Linear Programming) with heuristic approaches (e.g., Genetic Algorithms).
+1. **Predictive Modeling**  
+   - Develop machine learning models (e.g., **Random Forest, Gradient Boosting**) to forecast **home prices** and **rental costs**.  
+   - Identify key drivers of affordability using feature importance analysis.
+
+2. **Optimization Framework**  
+   - Formulate an **optimization model** to recommend the **best affordable housing options** based on income, location, and amenities.  
+   - Use **constraint-based optimization** to maximize **Quality of Life (QoL)** metrics while ensuring affordability.  
+   - Compare **Mixed Integer Linear Programming (MILP)** with **heuristic algorithms** for scalable solutions.
+
+3. **Scenario Analysis & Policy Impact**  
+   - Test **different affordability scenarios** under varying income distributions.  
+   - Analyze the impact of **zoning policies and rent control measures** on affordability.  
 
 ---
 
 ## **Key Features**
-- **Data-Driven Insights:** Uses historical housing market data (2014–2024) from authoritative sources, including Zillow, U.S. Census Bureau, Bureau of Labor Statistics, California Department of Finance, and other publicly available datasets.
-- **Predictive Models:** Includes Random Forest, Gradient Boosting, and regression models to identify key factors affecting affordability.
-- **Optimization Models:**
-  - Resource allocation for affordable housing improvements.
-  - Optimal site selection for new developments based on accessibility and affordability metrics.
-  - Policy impact analysis using scenario testing.
+### **1️⃣ Data-Driven Insights**
+- Uses **2014–2024 housing market data** from authoritative sources:
+  - **Zillow** (Home values & rental prices)
+  - **U.S. Census Bureau** (Income & population density)
+  - **Bureau of Labor Statistics** (Unemployment & wage data)
+  - **California Department of Finance** (Economic indicators)
+- Comprehensive dataset includes **housing, crime, air quality, mortgage rates, and healthcare accessibility**.
 
-<!-- ---
+### **2️⃣ Predictive Modeling**
+- **Regression & Machine Learning Models:**  
+  - **Random Forest, Gradient Boosting, Ridge & LASSO Regression**
+  - Feature selection for affordability drivers.
 
-## **Technologies Used**
-- **Programming Languages:** Python
-- **Libraries:** 
-  - **Data Processing:** Pandas, NumPy
-  - **Modeling:** Scikit-learn, XGBoost
-  - **Visualization:** Matplotlib, Seaborn
-  - **Optimization:** PuLP, OR-Tools, Pyomo
-- **Tools:** Jupyter Notebook, GitHub
+### **3️⃣ Optimization Models**
+- **Goal:** Maximize **Quality of Life (QoL)** while ensuring affordability.
+- **Constraints:**
+  - Rent-to-income ratio limits.
+  - Safety, healthcare accessibility, and environmental quality.
+- **Methods:**
+  - **Mixed Integer Linear Programming (MILP)**
+  - **Simulated Annealing (SA)**
+  - **Scenario-based optimization for policy evaluation**.
+
+---
+
+## **Project Workflow**
+1. **Data Processing** (📂 `/src/data_processing.py`)  
+   - Cleans & merges housing, economic, and demographic data.  
+   - Produces **two datasets**:  
+     - 📄 **`ml_data.csv`** → For predictive modeling (house-level data).  
+     - 📄 **`optimization_data.csv`** → For metro-wide yearly optimization.
+
+2. **Machine Learning Pipeline** (📂 `/src/ml_model.py`)  
+   - Trains **Random Forest, Gradient Boosting, and Regression models**.  
+   - Evaluates affordability prediction accuracy.
+
+3. **Optimization Model** (📂 `/src/optimization.py`)  
+   - Constructs a **Quality of Life (QoL) function** based on affordability, safety, and convenience.  
+   - Runs **constrained optimization** to **recommend optimal locations**.
 
 ---
 
 ## **Project Structure**
 ```plaintext
+cal-housing-optimization/
 ├── data/                  # Raw and processed datasets
-├── models/                # Predictive modeling scripts
-├── optimization/          # Optimization model scripts
-├── results/               # Output files and visualizations
-├── notebooks/             # Jupyter notebooks for exploration and testing
+│   ├── raw/               # Original data files
+│   ├── processed/         # Cleaned datasets (ml_data.csv, optimization_data.csv)
+├── src/                   # Source code
+│   ├── data_processing.py # Data preparation pipeline
+│   ├── ml_model.py        # Machine learning model training
+│   ├── optimization.py    # Housing optimization model
+│   ├── main.py            # End-to-end pipeline
+├── notebooks/             # Jupyter notebooks for testing
+├── results/               # Model outputs & analysis reports
 ├── README.md              # Project documentation (this file)
-└── LICENSE                # License information -->
+└── LICENSE                # License information
+
+
+<!-- 
+## **Technologies Used**
+### **🛠️ Programming & Libraries**
+- **Languages:** Python  
+- **Data Processing:** Pandas, NumPy  
+- **Machine Learning:** Scikit-learn, XGBoost  
+- **Optimization:** Pyomo, OR-Tools, PuLP  
+- **Visualization:** Matplotlib, Seaborn  
+
+### **📂 Tools**
+- Jupyter Notebook  
+- GitHub (Version Control)  
+- Pandas Profiling for EDA  
+- Google Cloud (for potential large-scale data processing) -->
