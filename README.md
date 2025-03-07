@@ -82,14 +82,16 @@ California faces a **severe housing affordability crisis**, where housing costs 
 - **Machine Learning:** Scikit-learn, XGBoost  
 - **Optimization:** Pyomo, OR-Tools, PuLP  
 - **Visualization:** Matplotlib, Seaborn  
+<<<<<<< HEAD
+=======
 
 ### **📂 Tools**
 - Jupyter Notebook  
 - GitHub (Version Control)  
 - Pandas Profiling for EDA  
 - Google Cloud (for potential large-scale data processing) -->
+>>>>>>> 95cc16d (revise README)
 
-s
 ---
 
 ## **Project Structure**
