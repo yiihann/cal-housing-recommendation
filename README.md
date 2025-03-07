@@ -72,25 +72,6 @@ California faces a **severe housing affordability crisis**, where housing costs 
    - Constructs a **Quality of Life (QoL) function** based on affordability, safety, and convenience.  
    - Runs **constrained optimization** to **recommend optimal locations**.
 
-<!-- 
----
-
-## **Technologies Used**
-### **🛠️ Programming & Libraries**
-- **Languages:** Python  
-- **Data Processing:** Pandas, NumPy  
-- **Machine Learning:** Scikit-learn, XGBoost  
-- **Optimization:** Pyomo, OR-Tools, PuLP  
-- **Visualization:** Matplotlib, Seaborn  
-<<<<<<< HEAD
-=======
-
-### **📂 Tools**
-- Jupyter Notebook  
-- GitHub (Version Control)  
-- Pandas Profiling for EDA  
-- Google Cloud (for potential large-scale data processing) -->
->>>>>>> 95cc16d (revise README)
 
 ---
 
