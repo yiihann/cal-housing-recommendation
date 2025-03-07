@@ -11,16 +11,16 @@ def load_datasets():
         pd.DataFrame: Fully merged dataset.
     """
     # Load datasets
-    zhvi_data = pd.read_csv('../data/ZHVI_2014-2024.csv')
-    zori_data = pd.read_csv('../data/ZORI_2015-2024.csv')
-    agi_data = pd.read_csv('../data/AGI_2014-2021.csv')
-    crimes_data = pd.read_csv('../data/Crimes_2014-2023.csv')
-    mortgage_rates_data = pd.read_csv('../data/Mortgage_Rates_2014-2024.csv')
-    unemployment_rate_data = pd.read_csv('../data/Unemployment_Rate_2014-2024.csv')
-    census_data = pd.read_csv("../data/census_data.csv")
-    healthcare_data = pd.read_csv("../data/healthcare_data.csv")
-    air_quality = pd.read_csv('../data/air_quality.csv')
-    property_tax = pd.read_csv('../data/property_tax.csv')
+    zhvi_data = pd.read_csv('../data/raw/ZHVI_2014-2024.csv')
+    zori_data = pd.read_csv('../data/raw/ZORI_2015-2024.csv')
+    agi_data = pd.read_csv('../data/raw/AGI_2014-2021.csv')
+    crimes_data = pd.read_csv('../data/raw/Crimes_2014-2023.csv')
+    mortgage_rates_data = pd.read_csv('../data/raw/Mortgage_Rates_2014-2024.csv')
+    unemployment_rate_data = pd.read_csv('../data/raw/Unemployment_Rate_2014-2024.csv')
+    census_data = pd.read_csv("../data/raw/census_data.csv")
+    healthcare_data = pd.read_csv("../data/raw/healthcare_data.csv")
+    air_quality = pd.read_csv('../data/raw/air_quality.csv')
+    property_tax = pd.read_csv('../data/raw/property_tax.csv')
 
     # Merge zhvi and zori data
     merged_data = pd.merge(
@@ -255,7 +255,7 @@ def preprocess_pipeline(output_ml_path="../data/processed/ml_data.csv", output_o
     print(f"ML dataset saved to {output_ml_path}")
 
     print("Generating Optimization dataset...")
-    hourly_wage = pd.read_excel("../data/wage_housing.xlsx", sheet_name='Data')
+    hourly_wage = pd.read_excel("../data/raw/wage_housing.xlsx", sheet_name='Data')
 
     df_opt = prepare_optimization_dataset(df, hourly_wage)
     df_opt.to_csv(output_opt_path, index=False)
