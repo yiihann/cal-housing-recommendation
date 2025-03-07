@@ -3,5 +3,3 @@
 preprocessed/*
 models/*
 *.pkl
-analysis/*
-*.ipynb
