@@ -11,16 +11,16 @@ def load_datasets():
         pd.DataFrame: Fully merged dataset.
     """
     # Load datasets
-    zhvi_data = pd.read_csv('../data/raw/ZHVI_2014-2024.csv')
-    zori_data = pd.read_csv('../data/raw/ZORI_2015-2024.csv')
-    agi_data = pd.read_csv('../data/raw/AGI_2014-2021.csv')
-    crimes_data = pd.read_csv('../data/raw/Crimes_2014-2023.csv')
-    mortgage_rates_data = pd.read_csv('../data/raw/Mortgage_Rates_2014-2024.csv')
-    unemployment_rate_data = pd.read_csv('../data/raw/Unemployment_Rate_2014-2024.csv')
-    census_data = pd.read_csv("../data/raw/census_data.csv")
-    healthcare_data = pd.read_csv("../data/raw/healthcare_data.csv")
-    air_quality = pd.read_csv('../data/raw/air_quality.csv')
-    property_tax = pd.read_csv('../data/raw/property_tax.csv')
+    zhvi_data = pd.read_csv('./data/raw/ZHVI_2014-2024.csv')
+    zori_data = pd.read_csv('./data/raw/ZORI_2015-2024.csv')
+    agi_data = pd.read_csv('./data/raw/AGI_2014-2021.csv')
+    crimes_data = pd.read_csv('./data/raw/Crimes_2014-2023.csv')
+    mortgage_rates_data = pd.read_csv('./data/raw/Mortgage_Rates_2014-2024.csv')
+    unemployment_rate_data = pd.read_csv('./data/raw/Unemployment_Rate_2014-2024.csv')
+    census_data = pd.read_csv("./data/raw/census_data.csv")
+    healthcare_data = pd.read_csv("./data/raw/healthcare_data.csv")
+    air_quality = pd.read_csv('./data/raw/air_quality.csv')
+    property_tax = pd.read_csv('./data/raw/property_tax.csv')
 
     # Merge zhvi and zori data
     merged_data = pd.merge(
@@ -168,28 +168,28 @@ def prepare_ml_dataset(df):
         pd.DataFrame: Clean dataset for ML.
     """
     columns_needed = [
-        "RegionID", "RegionName", "RegionType", "StateName", "City_x", "Metro", "CountyName",
-        "Date", "HomeValue", "ObservedRent", "Year", "agi_by_zipcode",
-        "Arson Count", "Property Crimes Count", "Violent Crimes Count",
-        "30 yr FRM", "15 yr FRM", "Month", "Unemployment Rate",
-        "Total Population", "Land Area in Square Miles", "Population Per Square Mile (Land Area)",
-        "HealthCareFacilityAmmount"
+        'agi_by_zipcode', 'Arson Count', 'Property Crimes Count', 'Violent Crimes Count',
+        '30 yr FRM', '15 yr FRM', 'Unemployment Rate', 'Total Population', 'Land Area in Square Miles',
+       'Population Per Square Mile (Land Area)', 'HealthCareFacilityAmmount', 'HomeValue'
     ]
     df_ml = df[columns_needed].copy()
+    df_ml.dropna(subset=['HomeValue'],inplace=True)
     return df_ml
 
 def prepare_optimization_dataset(df, hourly_wage):
     """
-    Prepare dataset for the optimization model.
+    Prepare the optimization input data using predicted values.
     Aggregates data to metro-level yearly from 2021 onwards.
     Args:
-        df (pd.DataFrame): Preprocessed merged dataset.
+        df: Original cleaned dataset.
         hourly_wage (pd.DataFrame): Hourly wage data.
     Returns:
         pd.DataFrame: Aggregated dataset for optimization.
     """
-    df_opt = df[df['Year'] >= 2021].reset_index(drop=True)
-    df_opt = df_opt.drop(columns=['RegionType', 'StateName', 'HomeValue', 'ObservedRent'])
+    df = df.copy()
+    df = df[df['Year'] >= 2021].reset_index(drop=True)
+    
+    df_opt = df.drop(columns=['RegionType', 'StateName', 'HomeValue', 'ObservedRent'])
     # Standardize Metro names
     df_opt = standardize_metro_names(df_opt)
 
@@ -235,7 +235,7 @@ def prepare_optimization_dataset(df, hourly_wage):
 
     return final_merged_df
 
-def preprocess_pipeline(output_ml_path="../data/processed/ml_data.csv", output_opt_path="../data/processed/optimization_data.csv"):
+def preprocess_pipeline(output_path="./data/processed/full_data.csv"):
     """
     Full pipeline: Load, clean, and return preprocessed datasets for ML and optimization.
     Args:
@@ -247,33 +247,27 @@ def preprocess_pipeline(output_ml_path="../data/processed/ml_data.csv", output_o
 
     print("Cleaning dataset...")
     df = clean_data(df)
+    df.to_csv(output_path, index=False)
+    # print("Generating Machine Learning dataset...")
+    # df_ml = prepare_ml_dataset(df)
+    # df_ml.to_csv(output_ml_path, index=False)
+    # print(f"ML dataset saved to {output_ml_path}")
 
-    print("Generating Machine Learning dataset...")
-    df_ml = prepare_ml_dataset(df)
-    df_ml.to_csv(output_ml_path, index=False)
-    print(f"ML dataset saved to {output_ml_path}")
+    # print("Generating Optimization dataset...")
+    # hourly_wage = pd.read_excel("../data/raw/wage_housing.xlsx", sheet_name='Data')
 
-    print("Generating Optimization dataset...")
-    hourly_wage = pd.read_excel("../data/raw/wage_housing.xlsx", sheet_name='Data')
+    # df_opt = prepare_optimization_dataset(df, hourly_wage)
+    # df_opt.to_csv(output_opt_path, index=False)
+    # print(f"Optimization dataset saved to {output_opt_path}")
 
-    df_opt = prepare_optimization_dataset(df, hourly_wage)
-    df_opt.to_csv(output_opt_path, index=False)
-    print(f"Optimization dataset saved to {output_opt_path}")
-
-    return df_ml, df_opt
+    return df
 
 if __name__ == "__main__":
     print("Running data preprocessing pipeline...")
 
     try:
-        df_ml, df_opt = preprocess_pipeline()
-
-        print("\nML Dataset Preview:")
-        print(df_ml.head())
-
-        print("\nOptimization Dataset Preview:")
-        print(df_opt.head())
-
+        df = preprocess_pipeline()
+        print(df.head())
         print("\nData preprocessing completed successfully!")
 
     except Exception as e:

@@ -80,13 +80,13 @@ California faces a **severe housing affordability crisis**, where housing costs 
 cal-housing-optimization/
 ├── data/                  # Raw and processed datasets
 │   ├── raw/               # Original data files
-│   ├── processed/         # Cleaned datasets (ml_data.csv, optimization_data.csv)
+│   ├── processed/         # Cleaned datasets (full_data.csv, ml_data.csv, optimization_data.csv)
 ├── src/                   # Source code
-│   ├── data_processing.py # Data preparation pipeline
-│   ├── ml_model.py        # Machine learning model training
-│   ├── optimization.py    # Housing optimization model
-│   ├── main.py            # End-to-end pipeline
-├── notebooks/             # Jupyter notebooks for testing
-├── results/               # Model outputs & analysis reports
+│   ├── data_processing.py # Full ETL and preprocessing pipeline
+│   ├── ml_model.py        # ML training, prediction, model loading
+│   ├── optimization.py    # ILP + SA optimization models
+├── main.py                # End-to-end pipeline
+├── notebooks/             # Jupyter notebooks for EDA & choosing models
+├── figures/               # Visualizations, logs, and summary tables
 ├── README.md              # Project documentation (this file)
 └── LICENSE                # License information

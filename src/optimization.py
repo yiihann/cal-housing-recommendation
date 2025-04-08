@@ -1,80 +1,114 @@
 
-
-import numpy as np
 import pandas as pd
-from scipy.optimize import minimize
+import numpy as np
+from gurobipy import Model, GRB, quicksum
 
-def setup_optimization_problem(data, income, weights):
-    """
-    Set up the optimization problem by defining the objective function and constraints.
-    Args:
-        data (pd.DataFrame): Processed dataset containing relevant metrics.
-        income (float): User's income.
-        weights (dict): Dictionary containing weights for affordability, healthcare, air quality, etc.
-    Returns:
-        dict: Contains the problem setup, including the objective function and constraints.
-    """
-    def quality_of_life(x):
-        """
-        Quality of Life function to maximize.
-        Args:
-            x (np.ndarray): Array of decision variables representing location scores.
-        Returns:
-            float: Negative QoL score (since we minimize in scipy.optimize).
-        """
-        affordability = np.dot(x, data["HourlyWageRequired"]) / income
-        healthcare = np.dot(x, data["HealthcareScore"])
-        air_quality = np.dot(x, data["AirQualityScore"])
-        crime = np.dot(x, data["CrimeScore"])
-        unemployment = np.dot(x, data["UnemploymentScore"])
-        
-        return -(weights["affordability"] * affordability + 
-                 weights["healthcare"] * healthcare + 
-                 weights["air_quality"] * air_quality - 
-                 weights["crime"] * crime - 
-                 weights["unemployment"] * unemployment)
 
-    constraints = [
-        {"type": "eq", "fun": lambda x: np.sum(x) - 1},  # Ensures sum of selection probabilities is 1
-        {"type": "ineq", "fun": lambda x: income - np.dot(x, data["HourlyWageRequired"])}  # Affordability constraint
-    ]
-    
-    bounds = [(0, 1) for _ in range(len(data))]  # Each location's selection weight is between 0 and 1
-    
-    return {"objective": quality_of_life, "constraints": constraints, "bounds": bounds}
+def ILP(data, weights, lambda_weights, gamma_weights, user_income, affordability_ratio):
+    w1, w2, w3, w4, w5, w6 = weights
 
-def run_optimization(problem_setup):
-    """
-    Run the optimization solver.
-    Args:
-        problem_setup (dict): Contains objective function, constraints, and bounds.
-    Returns:
-        np.ndarray: Optimized selection of locations.
-    """
-    num_locations = len(problem_setup["bounds"])
-    initial_guess = np.ones(num_locations) / num_locations  # Equal weight initialization
-
-    result = minimize(
-        problem_setup["objective"],
-        initial_guess,
-        bounds=problem_setup["bounds"],
-        constraints=problem_setup["constraints"],
-        method="SLSQP"
+    data['AirQualityScore'] = (
+        lambda_weights[0] * data['Good_Percentage'] +
+        lambda_weights[1] * data['Moderate_Percentage'] +
+        lambda_weights[2] * data['Unhealthy_Sensitive_Percentage'] +
+        lambda_weights[3] * data['Unhealthy_Percentage'] +
+        lambda_weights[4] * data['Very_Unhealthy_Percentage'] +
+        lambda_weights[5] * data['Hazardous_Percentage']
     )
 
-    if result.success:
-        return result.x
-    else:
-        raise ValueError("Optimization failed: " + result.message)
+    data['CrimeScore'] = (
+        gamma_weights[0] * data['Arson Count'] +
+        gamma_weights[1] * data['Property Crimes Count'] +
+        gamma_weights[2] * data['Violent Crimes Count']
+    )
 
-def postprocess_results(data, solution):
-    """
-    Post-process optimization results and return top recommended locations.
-    Args:
-        data (pd.DataFrame): Processed dataset with location information.
-        solution (np.ndarray): Optimized selection of locations.
-    Returns:
-        pd.DataFrame: Top recommended locations.
-    """
-    data["SelectionScore"] = solution
-    return data.sort_values(by="SelectionScore", ascending=False).head(5)
+    model = Model("Metro_Selection")
+    x = model.addVars(data.index, vtype=GRB.BINARY, name="x")
+
+    objective = quicksum(
+        (w1 * data.loc[i, 'Predicted_HomeValue'] / data.loc[i, 'Hourly_Wage']
+         - w2 * data.loc[i, 'HealthCareFacilityAmmount']
+         - w3 * data.loc[i, 'AirQualityScore']
+         + w4 * data.loc[i, 'Unemployment Rate']
+         + w5 * data.loc[i, 'CrimeScore']
+         + w6 * data.loc[i, 'Population Per Square Mile (Land Area)']) * x[i]
+        for i in data.index
+    )
+    model.setObjective(objective, GRB.MINIMIZE)
+
+    for i in data.index:
+        model.addConstr(
+            x[i] * data.loc[i, 'Predicted_HomeValue'] <= x[i] * affordability_ratio * user_income * 12 * 40,
+            name=f"affordability_{i}"
+        )
+
+    model.addConstr(quicksum(x[i] for i in data.index) == 1, name="select_one_metro")
+
+    model.optimize()
+
+    if model.status == GRB.OPTIMAL:
+        for i in data.index:
+            if x[i].x > 0.5:
+                return {
+                    "Method": "ILP",
+                    "Selected Metro": data.loc[i, 'Metro'],
+                    "Objective Value": model.objVal
+                }
+    return {
+        "Method": "ILP",
+        "Selected Metro": "No solution found",
+        "Objective Value": np.nan
+    }
+
+def compute_objective(data, i, weights, lambda_weights, gamma_weights, user_income, affordability_ratio):
+    w1, w2, w3, w4, w5, w6 = weights
+
+    affordability_penalty = 1e6 if data.loc[i, 'Predicted_HomeValue'] > affordability_ratio * user_income * 12 * 40 else 0
+
+    return (
+        w1 * data.loc[i, 'Predicted_HomeValue'] / data.loc[i, 'Hourly_Wage']
+        - w2 * data.loc[i, 'HealthCareFacilityAmmount']
+        - w3 * (
+            lambda_weights[0] * data.loc[i, 'Good_Percentage'] +
+            lambda_weights[1] * data.loc[i, 'Moderate_Percentage'] +
+            lambda_weights[2] * data.loc[i, 'Unhealthy_Sensitive_Percentage'] +
+            lambda_weights[3] * data.loc[i, 'Unhealthy_Percentage'] +
+            lambda_weights[4] * data.loc[i, 'Very_Unhealthy_Percentage'] +
+            lambda_weights[5] * data.loc[i, 'Hazardous_Percentage']
+        )
+        + w4 * data.loc[i, 'Unemployment Rate']
+        + w5 * (
+            gamma_weights[0] * data.loc[i, 'Arson Count'] +
+            gamma_weights[1] * data.loc[i, 'Property Crimes Count'] +
+            gamma_weights[2] * data.loc[i, 'Violent Crimes Count']
+        )
+        + w6 * data.loc[i, 'Population Per Square Mile (Land Area)']
+        + affordability_penalty
+    )
+
+def SA(data, weights, lambda_weights, gamma_weights, user_income, affordability_ratio, max_iter=1000, temp=1000, cooling=0.95):
+    current = np.random.choice(data.index)
+    best = current
+    best_score = compute_objective(data, current, weights, lambda_weights, gamma_weights, user_income, affordability_ratio)
+
+    for _ in range(max_iter):
+        neighbor = np.random.choice(data.index)
+        delta = compute_objective(data, neighbor, weights, lambda_weights, gamma_weights, user_income, affordability_ratio) - best_score
+
+        if delta < 0 or np.random.rand() < np.exp(-delta / temp):
+            current = neighbor
+            best_score += delta
+            best = current
+
+        temp *= cooling
+        if temp < 1e-3:
+            break
+
+    if best_score > 1e5:
+        return {"Method": "SA", "Selected Metro": "No solution", "Objective Value": np.nan}
+
+    return {
+        "Method": "SA",
+        "Selected Metro": data.loc[best, 'Metro'],
+        "Objective Value": best_score
+    }
