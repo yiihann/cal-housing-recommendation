@@ -5,7 +5,6 @@ This project explores **housing affordability in California** by integrating **p
 
 This work is part of **IEOR 240 (Optimization Analysis) and IEOR 242A (Machine Learning Analytics)** at **UC Berkeley**, demonstrating the intersection of **machine learning** and **optimization-based decision-making** in real-world housing challenges.
 
----
 
 ## **Motivation**
 California faces a **severe housing affordability crisis**, where housing costs significantly outpace income growth. This project aims to:
@@ -13,7 +12,6 @@ California faces a **severe housing affordability crisis**, where housing costs 
 - **Optimize housing selection** by balancing affordability, location, and quality of life.
 - **Support decision-making** for policymakers and individuals navigating the housing market.
 
----
 
 ## **Objectives**
 1. **Predictive Modeling**  
@@ -29,7 +27,6 @@ California faces a **severe housing affordability crisis**, where housing costs 
    - Test **different affordability scenarios** under varying income distributions.  
    - Analyze the impact of **zoning policies and rent control measures** on affordability.  
 
----
 
 ## **Key Features**
 ### **1️⃣ Data-Driven Insights**
@@ -55,7 +52,6 @@ California faces a **severe housing affordability crisis**, where housing costs 
   - **Simulated Annealing (SA)**
   - **Scenario-based optimization for policy evaluation**.
 
----
 
 ## **Project Workflow**
 1. **Data Processing** (📂 `/src/data_processing.py`)  
@@ -72,8 +68,6 @@ California faces a **severe housing affordability crisis**, where housing costs 
    - Constructs a **Quality of Life (QoL) function** based on affordability, safety, and convenience.  
    - Runs **constrained optimization** to **recommend optimal locations**.
 
-
----
 
 ## **Project Structure**
 ```plaintext
